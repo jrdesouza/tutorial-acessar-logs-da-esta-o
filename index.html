@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial de Acesso aos Logs</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f6fa;
+        }
+
+        /* Header */
+        .header {
+            width: 100%;
+            background-color: #1f2937;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1001;
+        }
+
+        .header .menu-toggle {
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            background-color: white;
+            border: none;
+            cursor: pointer;
+            z-index: 1001;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0;
+        }
+
+        .header .menu-toggle div {
+            background-color: #4b5563;
+            width: 25px;
+            height: 3px;
+            border-radius: 3px;
+        }
+
+        .header img {
+            height: 50px;
+            margin-right: 15px;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 20px;
+            margin: 0;
+            text-align: center;
+        }
+
+        /* Layout principal */
+        .main-container {
+            display: flex;
+            margin-top: 60px;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #1f2937;
+            color: white;
+            height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            transition: transform 0.3s ease;
+            transform: translateX(-250px);
+            z-index: 1000;
+        }
+
+        .sidebar.show {
+            transform: translateX(0);
+        }
+
+        .sidebar h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin: 10px 0;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            background-color: #374151;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #4b5563;
+        }
+
+        .content {
+            flex: 1;
+            margin-left: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: margin-left 0.3s ease;
+        }
+
+        .content.sidebar-hidden {
+            margin-left: 250px;
+        }
+
+        .content h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #111827;
+            font-weight: bold;
+        }
+
+        .step {
+            background-color: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3b82f6;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        .step h3 {
+            margin-top: 0;
+            font-size: 18px;
+            color: #1f2937;
+            font-weight: bold;
+        }
+
+        .step p {
+            color: #4b5563;
+            font-size: 14px;
+        }
+
+        .step img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #374151;
+            color: white;
+            font-size: 14px;
+            width: 100%;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: absolute;
+                top: 0;
+                height: 100vh;
+                transform: translateX(-250px);
+            }
+
+            .content.sidebar-hidden {
+                margin-left: 0;
+            }
+
+            .header {
+                justify-content: center;
+            }
+
+            .header h1 {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header img {
+                height: 40px;
+            }
+
+            .header h1 {
+                font-size: 16px;
+            }
+
+            .step {
+                padding: 10px;
+            }
+
+            .step h3 {
+                font-size: 16px;
+            }
+
+            .step p {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <button class="menu-toggle">
+            <div></div>
+            <div></div>
+            <div></div>
+        </button>
+        <img src="static/Logo-tupi.png.webp" alt="Logo da Empresa">
+    </div>
+
+    <!-- Layout Principal -->
+    <div class="main-container">
+        <div class="sidebar">
+            <h2>Menu do Tutorial</h2>
+            <ul>
+                <li><a href="#introduction">Introdução</a></li>
+                <li><a href="#step1">Passo 1: Acesse o link</a></li>
+                <li><a href="#step2">Passo 2: clicar em entrar</a></li>
+                <li><a href="#step3">Passo 3: Clicar OCPP</a></li>
+                <li><a href="#step4">Passo 4: Clicar em Logs</a></li>
+                <li><a href="#step5">Passo 5: Clicar "Selecione a estação</a></li>
+                <li><a href="#step6">Passo 6: Clicar "na estação desejada</a></li>
+                <li><a href="#step7">Passo 7: Analise os Logs</a></li>
+
+                <li><a href="#conclusion">Conclusão</a></li>
+            </ul>
+        </div>
+
+        <div class="content sidebar-hidden">
+            <h1 id="introduction">Acessando os Logs de uma Estação</h1>
+
+            <div class="step" id="step1">
+                <h3>Passo 1: Acesse o Link</h3>
+                <a href="https://admin.tupinambaenergia.com.br/" target="_blank">https://admin.tupinambaenergia.com.br/</a>
+                 <p>Entrar no link acima.</p>
+            </div>
+
+
+             <div class="step" id="step2">
+                <h3>Passo 2: clicar em entrar</h3>
+                <p>Efetuar login.</p>
+                <img src="image/slep1.png" alt="Login no Portal">
+            </div>
+
+            <div class="step" id="step3">
+                <h3>Passo 3: Clicar OCPP</h3>
+                <p>Procurar no lado esquerdo a opção OCPP.</p>
+                <img src="image/slep2.png" alt="Pesquisar Estação">
+            </div>
+
+            <div class="step" id="step4">
+                <h3>Passo 4: Clicar em Logs</h3>
+                <p>Procurar no lado esquerdo a opção Logs.</p>
+                <img src="image/slep3.png" alt="Baixar Logs">
+            </div>
+
+            <div class="step" id="step5">
+                <h3>Passo 5: Clicar "Selecione a estação"</h3>
+                <p>Clicar .</p>
+                <img src="image/slep4.png" alt="Baixar Logs">
+            </div>
+
+             <div class="step" id="step6">
+                <h3>Passo 6: Clicar "na estação desejada"</h3>
+                <p>Selecionar a estação que deseja.</p>
+                <img src="image/slep5.png" alt="Baixar Logs">
+            </div>
+
+             <div class="step" id="step7">
+                <h3>Passo 7: Clicar "na estação desejada"</h3>
+                <p>Selecione a data.</p>
+                <img src="image/slep6.png" alt="Baixar Logs">
+            </div>
+
+            <div class="step" id="step8">
+                <h3>Passo 7: Analise os Logs"</h3>
+                <p>analise.</p>
+                <img src="image/slep8.png" alt="Baixar Logs">
+            </div>
+
+            <div class="step" id="conclusion">
+                <h3>Conclusão</h3>
+                <p>Parabéns! Você acessou e os Logs da estação desejada.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        &copy; 2024 Tupi. Todos os direitos reservados.
+    </div>
+
+    <script>
+        const menuToggle = document.querySelector('.menu-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        const content = document.querySelector('.content');
+
+        menuToggle.addEventListener('click', (event) => {
+            event.stopPropagation();
+            sidebar.classList.toggle('show');
+            content.classList.toggle('sidebar-hidden');
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!sidebar.contains(event.target) && !menuToggle.contains(event.target) && sidebar.classList.contains('show')) {
+                sidebar.classList.remove('show');
+                content.classList.add('sidebar-hidden');
+            }
+        });
+
+        // Smooth scroll for sidebar links
+        document.querySelectorAll('.sidebar ul li a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                document.getElementById(targetId).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+
+</body>
+</html>
